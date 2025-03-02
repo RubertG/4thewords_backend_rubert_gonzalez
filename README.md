@@ -1,0 +1,4 @@
+- Nombre base de datos: 4thewords_prueba_rubert_gonzalez
+- Nombre de la tabla: leyendas
+- Nombre del backend: 4thewords_backend_rubert_gonzalez
+- Nombre del frontend: 4thewords_frontend_rubert_gonzalez
