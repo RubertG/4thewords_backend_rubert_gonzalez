@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS legend (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-INSERT INTO legends (name, category, description, legend_date, province, canton, district, image_url) VALUES
+INSERT INTO legend (name, category, description, legend_date, province, canton, district, image_url) VALUES
 ('La Tulevieja', 'Fantasía', 'Espíritu de una mujer que abandonó a su hijo y fue condenada a vagar por los ríos de Costa Rica.', '1920-04-03', 'Cartago', 'Turrialba', 'Santa Cruz', 'https://firebasestorage.googleapis.com/v0/b/portafolio-web-c279e.appspot.com/o/tulevieja.jpg?alt=media&token=6480772e-1a24-4113-85a1-7732eda442e8'),
 ('El Cadejos', 'Misterio', 'Perro espectral que protege a los borrachos y castiga a los malvados.', '1905-10-23', 'San José', 'San José', 'Hospital', 'https://firebasestorage.googleapis.com/v0/b/portafolio-web-c279e.appspot.com/o/cadejos.jpeg?alt=media&token=878e9211-1f5f-4abd-86a2-ebbba97086f0'),
 ('La Llorona', 'Terror', 'Espíritu de una mujer que llora desconsoladamente por sus hijos cerca de los ríos.', '1890-05-15', 'Alajuela', 'Grecia', 'San Isidro', 'https://firebasestorage.googleapis.com/v0/b/portafolio-web-c279e.appspot.com/o/la-llorona.jpeg?alt=media&token=f9dc9956-aae7-4bc2-8ce9-a5e30c67e3e7'),
