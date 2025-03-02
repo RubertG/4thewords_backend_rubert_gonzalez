@@ -1,7 +1,7 @@
 CREATE DATABASE 4thewords_prueba_rubert_gonzalez;
 USE 4thewords_prueba_rubert_gonzalez;
 
-CREATE TABLE IF NOT EXISTS legends (
+CREATE TABLE IF NOT EXISTS legend (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     category VARCHAR(100) NOT NULL,
