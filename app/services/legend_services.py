@@ -21,6 +21,29 @@ def get_all_legends(session: SessionDep) -> list[Legend] | None:
         return None
 
 
+def create_legend(legend_data: Legend, session: SessionDep) -> Legend | None:
+    """
+    Crea una leyenda en la base de datos. Primero valida los datos de la leyenda y luego si guarda en la base de datos.
+
+    Args:
+        legend (Legend): Leyenda a crear.
+        session (SessionDep): Sesión de la base de datos.
+
+    Returns:
+        Legend | None: Leyenda creada o None si ocurre un error.
+    """
+    try:
+        legend = Legend.model_validate(legend_data.model_dump())
+        session.add(legend)
+        session.commit()
+        session.refresh(legend)
+
+        return legend
+    except Exception as e:
+
+        return None
+
+
 def get_legend_by_id(legend_id: int, session: SessionDep) -> Legend | None:
     """
     Obtiene una leyenda por su ID.

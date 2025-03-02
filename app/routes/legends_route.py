@@ -1,6 +1,10 @@
 from fastapi import APIRouter, HTTPException, status
 from app.core.db import SessionDep
-from app.services.legend_services import get_all_legends, get_legend_by_id
+from app.services.legend_services import (
+    get_all_legends,
+    get_legend_by_id,
+    create_legend,
+)
 from app.models.legend_model import Legend
 from app.schemas.legend_schema import LegendCreate
 
@@ -30,6 +34,29 @@ async def get_legends(session: SessionDep):
         )
 
     return legends
+
+
+@router.post("", response_model=Legend)
+async def add_legend(legend_data: LegendCreate, session: SessionDep):
+    """
+    Crea una leyenda.
+
+    Args:
+        legend_data (LegendCreate): Datos de la leyenda.
+        session (SessionDep): Sesión de la base de datos.
+
+    Returns:
+        Legend | HTTPException: Leyenda creada o un error 400.
+    """
+    legend = create_legend(legend_data, session)
+
+    if legend is None:
+        return HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Error al crear la leyenda",
+        )
+
+    return legend
 
 
 @router.get("/{legend_id}")
