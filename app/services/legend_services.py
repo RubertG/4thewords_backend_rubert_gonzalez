@@ -93,3 +93,27 @@ def update_legend(
         return legend_db
     except Exception as e:
         return None
+    
+def delete_legend(legend_id: int, session: SessionDep) -> bool:
+    """
+    Elimina una leyenda de la base de datos.
+
+    Args:
+        legend_id (int): ID de la leyenda a eliminar.
+        session (SessionDep): Sesión de la base de datos.
+
+    Returns:
+        bool: True si la leyenda fue eliminada o false si ocurre un error.
+    """
+    try:
+        legend = get_legend_by_id(legend_id, session)
+
+        if legend is None:
+            return None
+
+        session.delete(legend)
+        session.commit()
+
+        return True
+    except Exception as e:
+        return False

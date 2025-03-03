@@ -5,6 +5,7 @@ from app.services.legend_services import (
     get_legend_by_id,
     create_legend,
     update_legend,
+    delete_legend,
 )
 from app.models.legend_model import Legend
 from app.schemas.legend_schema import LegendCreate, LegendUpdate
@@ -29,7 +30,7 @@ async def get_legends(session: SessionDep):
     legends = get_all_legends(session)
 
     if legends is None:
-        return HTTPException(
+        raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Error al obtener las leyendas",
         )
@@ -52,7 +53,7 @@ async def add_legend(legend_data: LegendCreate, session: SessionDep):
     legend = create_legend(legend_data, session)
 
     if legend is None:
-        return HTTPException(
+        raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Error al crear la leyenda",
         )
@@ -75,7 +76,7 @@ async def get_legend(legend_id: int, session: SessionDep):
     legend = get_legend_by_id(legend_id, session)
 
     if legend is None:
-        return HTTPException(
+        raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Leyenda no encontrada",
         )
@@ -98,9 +99,32 @@ async def edit_legend(legend_id: int, legend_data: LegendUpdate, session: Sessio
     legend = update_legend(legend_id, legend_data, session)
 
     if legend is None:
-        return HTTPException(
+        raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Error al actualizar la leyenda, no se encontró la leyenda",
         )
 
     return legend
+
+
+@router.delete("/{legend_id}")
+async def remove_legend(legend_id: int, session: SessionDep):
+    """
+    Elimina una leyenda por su ID.
+
+    Args:
+        legend_id (int): ID de la leyenda.
+        session (SessionDep): Sesión de la base de datos.
+
+    Returns:
+        dict: Mensaje de éxito.
+    """
+    is_deleted = delete_legend(legend_id, session)
+
+    if not is_deleted:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Error al eliminar la leyenda, no se encontró la leyenda",
+        )
+
+    return {"detail": "Leyenda eliminada con éxito"}
