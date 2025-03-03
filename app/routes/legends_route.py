@@ -49,7 +49,7 @@ async def add_legend(legend_data: LegendCreate, session: SessionDep):
         session (SessionDep): Sesión de la base de datos.
 
     Returns:
-        Legend | HTTPException: Leyenda creada o un error
+        Legend | HTTPException: Leyenda creada o un error 422 que indica que los datos no son válidos o un error 500 si ocurre un error al crear la leyenda.
     """
     try:
         legend = create_legend(legend_data, session)
@@ -100,7 +100,7 @@ async def edit_legend(legend_id: int, legend_data: LegendUpdate, session: Sessio
         session (SessionDep): Sesión de la base de datos.
 
     Returns:
-        Legend | HTTPException: Leyenda actualizada o un error 404 si no se encuentra.
+        Legend | HTTPException: Leyenda actualizada o un error 422 que indica que los datos no son válidos o un error 404.
     """
     try:
         legend = update_legend(legend_id, legend_data, session)
@@ -109,7 +109,7 @@ async def edit_legend(legend_id: int, legend_data: LegendUpdate, session: Sessio
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
             detail="Error de validación de datos",
         )
-        
+
     if legend is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -129,7 +129,7 @@ async def remove_legend(legend_id: int, session: SessionDep):
         session (SessionDep): Sesión de la base de datos.
 
     Returns:
-        dict: Mensaje de éxito.
+        detail | HTTPException: Mensaje de éxito o un error
     """
     is_deleted = delete_legend(legend_id, session)
 
