@@ -1,4 +1,5 @@
 from app.core.db import SessionDep
+from pydantic import ValidationError
 from sqlmodel import select
 from app.models.legend_model import Legend
 from app.schemas.legend_schema import LegendCreate, LegendUpdate
@@ -40,8 +41,10 @@ def create_legend(legend_data: LegendCreate, session: SessionDep) -> Legend | No
         session.refresh(legend)
 
         return legend
-    except Exception as e:
+    except ValidationError as e:
+        raise
 
+    except Exception as e:
         return None
 
 
@@ -91,9 +94,13 @@ def update_legend(
         session.refresh(legend_db)
 
         return legend_db
+    except ValidationError as e:
+        raise
+
     except Exception as e:
         return None
-    
+
+
 def delete_legend(legend_id: int, session: SessionDep) -> bool:
     """
     Elimina una leyenda de la base de datos.

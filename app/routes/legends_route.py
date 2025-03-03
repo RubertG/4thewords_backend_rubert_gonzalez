@@ -9,6 +9,7 @@ from app.services.legend_services import (
 )
 from app.models.legend_model import Legend
 from app.schemas.legend_schema import LegendCreate, LegendUpdate
+from pydantic import ValidationError
 
 router = APIRouter(
     prefix="/leyendas",
@@ -31,7 +32,7 @@ async def get_legends(session: SessionDep):
 
     if legends is None:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Error al obtener las leyendas",
         )
 
@@ -48,20 +49,25 @@ async def add_legend(legend_data: LegendCreate, session: SessionDep):
         session (SessionDep): Sesión de la base de datos.
 
     Returns:
-        Legend | HTTPException: Leyenda creada o un error 400.
+        Legend | HTTPException: Leyenda creada o un error
     """
-    legend = create_legend(legend_data, session)
-
+    try:
+        legend = create_legend(legend_data, session)
+    except ValidationError as e:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="Error de validación de datos",
+        )
     if legend is None:
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Error al crear la leyenda",
         )
 
     return legend
 
 
-@router.get("/{legend_id}")
+@router.get("/{legend_id}", response_model=Legend)
 async def get_legend(legend_id: int, session: SessionDep):
     """
     Obtiene una leyenda por su ID.
@@ -96,8 +102,14 @@ async def edit_legend(legend_id: int, legend_data: LegendUpdate, session: Sessio
     Returns:
         Legend | HTTPException: Leyenda actualizada o un error 404 si no se encuentra.
     """
-    legend = update_legend(legend_id, legend_data, session)
-
+    try:
+        legend = update_legend(legend_id, legend_data, session)
+    except ValidationError as e:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="Error de validación de datos",
+        )
+        
     if legend is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -107,7 +119,7 @@ async def edit_legend(legend_id: int, legend_data: LegendUpdate, session: Sessio
     return legend
 
 
-@router.delete("/{legend_id}")
+@router.delete("/{legend_id}", status_code=status.HTTP_200_OK)
 async def remove_legend(legend_id: int, session: SessionDep):
     """
     Elimina una leyenda por su ID.
