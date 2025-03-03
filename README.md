@@ -33,7 +33,7 @@ DATABASE_URL=mysql://usuario:contraseña@localhost:3306/4thewords_prueba_rubert_
 6. Inicia el servidor con el siguiente comando:
 
 ```bash
-uvicorn main:app --reload
+fastapi dev --port 8080
 ```
 
 ## Consideraciones
