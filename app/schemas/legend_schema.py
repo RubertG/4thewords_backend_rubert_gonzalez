@@ -11,7 +11,7 @@ class LegendBase(SQLModel):
     province: str = Field(max_length=100)
     canton: str = Field(max_length=100)
     district: str = Field(max_length=100)
-    image_url: HttpUrl = Field(max_length=500)
+    image_url: str = Field(max_length=500)
 
 
 class LegendCreate(LegendBase):
